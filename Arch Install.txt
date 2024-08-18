@@ -1,0 +1,84 @@
+#Install
+iwctl
+device list
+station wlan0 get-networks
+station wlan0 connect GNXS-3C04B8
+xxxxx
+exit
+
+ping archlinux.org
+
+lsblk
+cfdisk /dev/nvme0n1
+Free Space - Create : 1G, -Type : EFI System
+Free Space - Create : 99G, -Type : Linux FileSystem
+Write Quit
+
+mkfs.fat -F32 /dev/nvme0n1p1
+mkfs.ext4 /dev/nvme0n1p2 (Proceed: Y)
+
+mount /dev/nvme0n1p2 /mnt
+mkdir /mnt/boot
+mount /dev/nvme0n1p1 /mnt/boot
+
+archinstall
+Pre-Mounted Configuration - /mnt
+Additional Packages - git vim intel-ucode
+
+#Beautify PacMan
+sudo vi /etc/pacman.conf
+Color
+ILoveCandy
+VerbosePkgLists
+ParallelDownloads = 5
+
+#Connect WiFi
+nmcli device wifi connect GNXS-3C04B8 password "xxxxx"
+
+mkdir launchpad
+cd launchpad
+
+#Install Yay
+pacman -S --needed git base-devel
+git clone https://aur.archlinux.org/yay.git
+cd yay
+makepkg -si
+
+#Fastest Mirror
+yay -S rate-mirrors
+rate-mirrors --protocol https arch | sudo tee /etc/pacman.d/mirrorlist
+sudo pacman -Syy
+
+#Install Plymouth / Windows Prober
+yay -S plymouth-git
+yay -S plymouth-theme-optimus-git
+sudo pacman -S os-prober
+sudo vim /etc/mkinitcpio.conf
+HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block plymouth filesystems fsck)
+sudo vim /etc/default/grub
+GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet splash"
+GRUB_DISABLE_OS_PROBER=false
+plymouth-set-default-theme -l 
+sudo plymouth-set-default-theme optimus
+plymouth-set-default-theme
+sudo mkinitcpio -p linux
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+#Grub Theme
+curl -L -o xenlism-grub-arch-4k.tar.xz https://github.com/xenlism/Grub-themes/raw/main/xenlism-grub-arch-4k.tar.xz
+tar -xvJf xenlism-grub-arch-4k.tar.xz
+cd xenlism-grub-arch-4k
+sudo ./install.sh
+
+#Install Hyprland
+yay -S hyprland 
+
+#Login Manager Lemurs
+sudo pacman -S lemurs
+sudo vim /etc/lemurs/wayland/hyprland
+#! /bin/sh
+exec Hyprland
+sudo chmod 755 /etc/lemurs/wayland/hyprland 
+sudo usermod -a -G seat vishnu
+groups vishnu
+sudo systemctl enable lemurs.service
