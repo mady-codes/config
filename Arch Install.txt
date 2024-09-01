@@ -66,12 +66,14 @@ sudo grub-mkconfig -o /boot/grub/grub.cfg
 
 #Grub Theme
 curl -L -o xenlism-grub-arch-4k.tar.xz https://github.com/xenlism/Grub-themes/raw/main/xenlism-grub-arch-4k.tar.xz
-tar -xv xenlism-grub-arch-4k.tar.xz
+tar -xzvf xenlism-grub-arch-4k.tar.xz
 cd xenlism-grub-arch-4k
+chmod +x install.sh
 sudo ./install.sh
 
-#Install Hyprland
-yay -S hyprland 
+#Remove SDDM
+sudo systemctl disable display-manager.service
+sudo pacman -R sddm
 
 #Login Manager Lemurs
 sudo pacman -S lemurs
@@ -83,6 +85,4 @@ sudo usermod -a -G seat vishnu
 groups vishnu
 sudo systemctl enable lemurs.service
 
-
-https://drive.google.com/file/d/1pW8SAkiFQVHTYBsfoqW8sb0ZYey68gYb/view?usp=drivesdk
 
