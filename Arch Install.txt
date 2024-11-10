@@ -83,6 +83,7 @@ hyprutils-git
 hyprwayland-scanner-git
 xdg-desktop-portal-hyprland-git
 aquamarine-git
+librewolf-bin
 nautilus-admin-gtk4
 nautilus-image-converter
 nautilus-open-any-terminal
