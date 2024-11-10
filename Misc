@@ -1,0 +1,9 @@
+## LibreWolf Dark
+
+
+    privacy.resistFingerprinting = false
+    privacy.fingerprintingProtection = true
+    privacy.fingerprintingProtection.overrides = +AllTargets,-CSSPrefersColorScheme
+
+
+
