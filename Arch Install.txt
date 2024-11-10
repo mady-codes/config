@@ -1,9 +1,9 @@
-#Install
+#Install-ArchLinux
 iwctl
 device list
 station wlan0 get-networks
 station wlan0 connect GNXS-3C04B8
-xxxxx
+"password"
 exit
 
 ping archlinux.org
@@ -23,10 +23,12 @@ mount /dev/nvme0n1p1 /mnt/boot
 
 archinstall
 Pre-Mounted Configuration - /mnt
-Additional Packages - git vim intel-ucode
+Additional Packages - git nano
+
+sudo reboot now
 
 #Beautify PacMan
-sudo vi /etc/pacman.conf
+sudo nano /etc/pacman.conf
 Color
 ILoveCandy
 VerbosePkgLists
@@ -35,8 +37,11 @@ ParallelDownloads = 5
 #Connect WiFi
 nmcli device wifi connect GNXS-3C04B8 password "xxxxx"
 
-mkdir launchpad
-cd launchpad
+sudo pacman -Syu
+
+#Create Folder for Yay
+mkdir AUR_Helper
+cd AUR_Helper
 
 #Install Yay
 pacman -S --needed git base-devel
@@ -44,18 +49,18 @@ git clone https://aur.archlinux.org/yay.git
 cd yay
 makepkg -si
 
-#Fastest Mirror
+#Setup Fastest Mirror
 yay -S rate-mirrors
 rate-mirrors --protocol https arch | sudo tee /etc/pacman.d/mirrorlist
 sudo pacman -Syy
 
-#Install Plymouth / Windows Prober
+#Install Plymouth Theme / OS Prober
 yay -S plymouth-git
 yay -S plymouth-theme-optimus-git
-sudo pacman -S os-prober
-sudo vim /etc/mkinitcpio.conf
+sudo pacman -S --needed os-prober
+sudo nano /etc/mkinitcpio.conf
 HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block plymouth filesystems fsck)
-sudo vim /etc/default/grub
+sudo nano /etc/default/grub
 GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet splash"
 GRUB_DISABLE_OS_PROBER=false
 plymouth-set-default-theme -l 
@@ -64,25 +69,129 @@ plymouth-set-default-theme
 sudo mkinitcpio -p linux
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 
-#Grub Theme
-curl -L -o xenlism-grub-arch-4k.tar.xz https://github.com/xenlism/Grub-themes/raw/main/xenlism-grub-arch-4k.tar.xz
-tar -xzvf xenlism-grub-arch-4k.tar.xz
-cd xenlism-grub-arch-4k
-chmod +x install.sh
-sudo ./install.sh
+#Install Hyprland & Utils
 
-#Remove SDDM
-sudo systemctl disable display-manager.service
-sudo pacman -R sddm
+#AUR - List
+hyprcursor-git
+hypridle-git
+hyprland-git
+hyprland-protocols-git
+hyprlang-git
+hyprlock-git
+hyprshot-git
+hyprutils-git
+hyprwayland-scanner-git
+xdg-desktop-portal-hyprland-git
+aquamarine-git
+nautilus-admin-gtk4
+nautilus-image-converter
+nautilus-open-any-terminal
+waybar-git
+kitty-git
+kitty-shell-integration-git
+kitty-terminfo-git
+swww-git
+blueman-git 
+brightnessctl-git
 
-#Login Manager Lemurs
-sudo pacman -S lemurs
-sudo vim /etc/lemurs/wayland/hyprland
-#! /bin/sh
-exec Hyprland
-sudo chmod 755 /etc/lemurs/wayland/hyprland 
-sudo usermod -a -G seat vishnu
-groups vishnu
-sudo systemctl enable lemurs.service
+
+#PacMan - List 
+polkit-gnome
+ly
+nautilus
+rofi-wayland
+nwg-look
+eza
+fzf
+zsh
+zsh-completions
+swaync
+adobe-source-code-pro-fonts
+bluez
+bluez-libs
+bluez-utils
+gnome-text-editor
+imagemagick
+intel-ucode
+lm_sensors
+loupe
+notification-daemon
+jq
+pamixer
+pavucontrol
+
+########################
+
+#Python - Utils
+
+python
+python-autocommand
+python-babel
+python-beautifulsoup4 
+python-build 
+python-cairo 
+python-charset-normalizer 
+python-contourpy 
+python-cycler 
+python-dateutil 
+python-dbus 
+python-docutils 
+python-fastjsonschema 
+python-fonttools
+python-gobject
+python-idna
+python-imagesize 
+python-importlib-metadata 
+python-installer 
+python-jaraco.context 
+python-jaraco.functools 
+python-jaraco.text 
+python-jinja 
+python-kiwisolver
+python-lxml 
+python-magic 
+python-mako 
+python-markdown 
+python-markupsafe 
+python-matplotlib 
+python-more-itertools 
+python-nautilus 
+python-numpy 
+python-ordered-set 
+python-packaging 
+python-pillow 
+python-platformdirs 
+python-pybluez 
+python-pygments 
+python-pyparsing 
+python-pyproject-hooks
+python-pytz 
+python-requests
+python-setuptools 
+python-six 
+python-smartypants 
+python-snowballstemmer 
+python-soupsieve 
+python-sphinx 
+python-sphinx-alabaster-theme
+python-sphinx-basic-ng 
+python-sphinx-copybutton 
+python-sphinx-furo 
+python-sphinx-inline-tabs 
+python-sphinxcontrib-applehelp 
+python-sphinxcontrib-devhelp 
+python-sphinxcontrib-htmlhelp 
+python-sphinxcontrib-jsmath 
+python-sphinxcontrib-qthelp 
+python-sphinxcontrib-serializinghtml 
+python-sphinxext-opengraph 
+python-tomli 
+python-tqdm 
+python-trove-classifiers 
+python-typogrify 
+python-urllib3 
+python-validate-pyproject 
+python-wheel 
+python-zipp 
 
 
